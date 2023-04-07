@@ -1,0 +1,23 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.block#main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.block#authDiv {
+    background-color: aqua;
+    padding: 50px;
+    border-radius: 10px;
+}
+
+input {
+    margin-bottom: 10px;
+    display: block;
+}

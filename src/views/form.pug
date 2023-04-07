@@ -1,0 +1,27 @@
+html 
+    head 
+        title= title
+        link(rel="stylesheet", href="/css/css-form.css")
+        script(src='/js/js-form.js')
+    body 
+        div(class="block" id="main")
+            div(class="block" id="subMain")
+                div(class="block" id="header")
+                    h1= form_name
+                    p= "Форма #" + form_id
+                    p= "Форма #" + form_desc
+                div(class="block" id="content")
+                    each question in questions 
+                        div(class="container" id="question")
+                            p(class="text" id="question")= question.name
+                            case question.type 
+                                when 0
+                                    input(type="text" id="answerInput")
+                                when 1
+                                    each variant in question.data.variants
+                                        div(style="display: flex")
+                                            input(id="radio" type="radio" name=question value=variant)
+                                            p(class="text" id="variant")= variant
+                                default 
+                                    p Нет такого типа вопроса!
+                    button(class="button" id="sendAnswers" onClick="sendAnswers()") Отправить

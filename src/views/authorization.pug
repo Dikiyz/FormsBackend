@@ -1,0 +1,19 @@
+html 
+    head 
+        title= title 
+        link(rel="stylesheet", href="/css/css-authorization.css")
+        script(src='/js/js-authorization.js')
+    body 
+        div(class="block" id="main")
+            div(class="block" id="authDiv")
+                p= test 
+                if isAuthorization 
+                    input(type="text" id="L_Login" placeholder="Логин")
+                    input(type="text" id="L_Password" placeholder="Пароль")
+                    button(onClick="tryLogIn()") Войти
+                else 
+                    input(type="text" id="R_Login" placeholder="Логин")
+                    input(type="text" id="R_Name" placeholder="Имя")
+                    input(type="text" id="R_EMail" placeholder="Почта")
+                    input(type="text" id="R_Password" placeholder="Пароль")
+                    button(onClick="trySignUp()") Зарегистрироваться
