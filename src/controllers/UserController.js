@@ -1,70 +1,48 @@
-import bcrypt from "bcrypt";
 import ApiError from "../ApiError.js";
 import env from "dotenv";
 import { User_DB } from "../database/index.js";
 import { Op } from "sequelize";
+import UserService from "../services/UserService.js";
 
 env.config();
 
 class UserController {
     async signUp(request, response, next) {
         try {
-            if (request.session.user) return next(ApiError.badRequest("Вы уже авторизованы."));
-
-            let { login, email, password, name } = request.body;
-
-            login = login.replace(/[^a-zA-Z0-9]/, '').toLowerCase();
-            password = password.replace(/[^a-zA-Z0-9]/, '');
-            email = email.replace(/[^a-zA-Z0-9.@]/, '');
-            name = name.replace(/[^a-zA-Z0-9]/, '');
-
-            console.log(2);
-            if (!login || !password) return next(ApiError.badRequest(`${!login ? 'Логин' : 'Пароль'} не указан.`));
-            if (!email) return next(ApiError.badRequest(`E-Mail не указан.`));
-            if (!name) return next(ApiError.badRequest(`Имя не указано.`));
-            console.log(3);
-
-            if (login.length < 4 || login.length > 20) return next(ApiError.badRequest(`Логин должен быть не менее 4-ёх и не более 20-ти символов.`));
-            if (password.length < 6 || password.length > 20) return next(ApiError.badRequest(`Пароль должен быть не менее 6-ти и не более 20-ти символов.`));
-            if (name.length < 6 || name.length > 20) return next(ApiError.badRequest(`Имя должено быть не менее 6-ти и не более 20-ти символов.`));
-            password = await bcrypt.hash(password, 5);
-
-            if (await User_DB.findOne({
-                where: {
-                    [Op.or]: [
-                        { login: { [Op.eq]: login } },
-                        { email: { [Op.eq]: email } }
-                    ]
-                }
-            })) return next(ApiError.badRequest("Пользователь с таким login или email уже зарегестрирован."))
-
-            // TODO: E-mail require.
-
-            const user = await User_DB.create({ login: login, password: password, name: name, email: email });
-
-            request.session.user = user;
+            if (request.cookies.refresh_token) return next(ApiError.badRequest("Вы уже авторизованы."));
+            const user = await UserService.registration(request.body.name, request.body.login, request.body.email, request.body.password);
+            response.cookie('refresh_token', user.refresh_token, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
             response.status(200).json({ id: user.id, logined: true });
         } catch (err) { next(ApiError.internal(err.message)); }
     }
 
     async logIn(request, response, next) {
         try {
-            if (request.session.user) return next(ApiError.badRequest("Вы уже авторизованы."));
+            if (request.cookies.refresh_token) return next(ApiError.badRequest("Вы уже авторизованы."));
+            const user = await UserService.authorization(request.body.login, request.body.password);
+            response.cookie('refresh_token', user.refresh_token, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
+            response.cookie('access_token', user.access_token, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
+            response.status(200).json({ id: user.id, logined: true });
+        } catch (err) { next(ApiError.internal(err.message)); }
+    }
 
-            const { login, password } = request.query;
-            if (!login || !password) return next(ApiError.badRequest(`${!login ? 'Логин' : 'Пароль'} не указан.`));
-
-            const user = await User_DB.findOne({ where: { [Op.and]: [{ login: login }, { password: password }] } });
-            if (!user) return next(ApiError.badRequest("Пользователь с таким логином и паролем не зарегистрирован."));
-
-            request.session.user = user;
+    async refresh(request, response, next) {
+        try {
+            const { refresh_token } = request.cookies;
+            if (!refresh_token) return next(ApiError.badRequest("Вы не авторизованы."));
+            const user = await UserService.refresh(refresh_token);
+            response.cookie('refresh_token', user.refresh_token, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
             response.status(200).json({ id: user.id, logined: true });
         } catch (err) { next(ApiError.internal(err.message)); }
     }
 
     async logOut(request, response, next) {
         try {
-
+            const { refresh_token } = request.cookies;
+            if (!refresh_token) return next(ApiError.badRequest("Вы не авторизованы."));
+            const token = await UserService.logOut(refresh_token);
+            response.clearCookie('refresh_token');
+            response.status(200).json({ logined: false });
         } catch (err) { next(ApiError.internal(err.message)); }
     }
 

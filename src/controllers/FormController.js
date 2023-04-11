@@ -1,6 +1,7 @@
 import ApiError from "../ApiError.js";
 import { Form_DB, Question_DB } from "../database/index.js";
 import env from "dotenv";
+import FormService from "../services/FormService.js";
 
 env.config();
 
@@ -33,53 +34,46 @@ class FormController {
     async remove(request, response, next) {
         try {
             const { id } = request.body;
-
-            Form_DB.destroy({ where: { id: id } });
+            FormService.removeById(id);
         } catch (err) { next(ApiError.internal(err.message)); }
     }
 
     async done(request, response, next) {
         try {
             const { form_id, answers } = request.body;
-
+            // TODO: All.
         } catch (err) { next(ApiError.internal(err.message)); }
     }
 
     async getOne(request, response, next) {
         try {
-            Form_DB.findOne({ where: { id: request.params.id } }).then(async result => {
-                if (!result) return next(ApiError.badRequest("Такой формы не существует."));
-                const questions = await Question_DB.findAll({ where: { form_id: result.id } });
-                response.render('form', {
-                    title: `Форма #${result.id}`,
-                    form_name: result.name,
-                    form_desc: result.description,
-                    form_id: result.id,
-                    message: "Проверка работоспособности",
-                    questions: questions.map(question => {
-                        try {
-                            return {
-                                type: question.type,
-                                data: JSON.parse(question.data),
-                                name: question.name
-                            };
-                        } catch (err) { next(ApiError.internal(err.message)); }
-                    })
-                });
-            }, err => { next(ApiError.internal(err)) });
+            const Form = await FormService.getById(request.params.id);
+            response.render('form', {
+                title: `Форма #${Form.id}`,
+                form_name: Form.name,
+                form_desc: Form.description,
+                form_id: Form.id,
+                message: "Проверка работоспособности",
+                questions: Form.questions.map(question => {
+                    try {
+                        return {
+                            type: question.type,
+                            data: JSON.parse(question.data),
+                            name: question.name
+                        };
+                    } catch (err) { next(ApiError.internal(err.message)); }
+                })
+            });
         } catch (err) { next(ApiError.internal(err.message)); }
     }
 
     async getList(request, response, next) {
         try {
-            Form_DB.findAll({ order: [['id', 'DESC']], limit: 10 }).then(result => {
-                if (result.length === 0) return next(ApiError.internal("Нет активных форм для заполнения."));
-
-                response.render('forms', {
-                    title: "Формы",
-                    forms: result
-                });
-            }, err => next(ApiError.internal("Ошибка обращения к базе данных. Свяжитесь с администратором.")));
+            const Forms = await FormService.getAll();
+            response.render('forms', {
+                title: "Формы",
+                forms: result
+            });
         } catch (err) { next(ApiError.internal(err.message)); }
     }
 }

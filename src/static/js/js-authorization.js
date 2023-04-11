@@ -16,12 +16,16 @@ function trySignUp() {
 }
 
 function tryLogIn() {
-    const login = document.getElementById("L_Login").textContent;
-    const password = document.getElementById("L_Password").textContent;
+    const login = document.getElementById("L_Login").value;
+    const password = document.getElementById("L_Password").value;
 
-    fetch(`/user/login/?login=${login}&password=${password}`).then(async result => {
+    fetch("/user/login", {
+        method: "POST",
+        body: JSON.stringify({ login: login, password: password }),
+        headers: { "Content-type": "application/json; charset=UTF-8" }
+    }).then(async result => {
         result = await result.json();
-        if (result.logined) window.location = "/forms";
+        if (result.logined) window.location = "/form/1";
         else alert(result.message);
     });
 }

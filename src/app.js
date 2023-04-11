@@ -7,6 +7,7 @@ import router from "./routes/index.js";
 import errorHandler from "./middlewares/ErrorHandlingMiddleware.js";
 import ApiError from "./ApiError.js";
 import session from "express-session";
+import cookieParser from "cookie-parser";
 
 env.config();
 
@@ -20,6 +21,7 @@ App.use(session({ secret: "sdfsdfsdfsdffsddsf23423s drf234 f34", cookie: { maxAg
 
 App.use(cors());
 App.use(express.json());
+App.use(cookieParser());
 App.use(fileUpload({}));
 App.use('/', router);
 

@@ -8,6 +8,7 @@ import model_form from './models/forms.js';
 import model_question from './models/questions.js';
 import model_answer from './models/answers.js';
 import model_form_answer from './models/form_answers.js';
+import model_tokens from './models/tokens.js';
 
 const connection = new Sequelize(
     process.env.DB_DATABASE,
@@ -26,6 +27,7 @@ const Form = connection.define(model_form.name, model_form.params, model_form.pa
 const Question = connection.define(model_question.name, model_question.params, model_question.params2);
 const Form_Answer = connection.define(model_form_answer.name, model_form_answer.params, model_form_answer.params2);
 const Answer = connection.define(model_answer.name, model_answer.params, model_answer.params2);
+const Token = connection.define(model_tokens.name, model_tokens.params, model_tokens.params2);
 
 //#region Associations
 User.hasMany(Form, { foreignKey: 'author_id' });
@@ -33,6 +35,9 @@ Form.belongsTo(User, { foreignKey: 'author_id' });
 
 User.hasMany(Form_Answer, { foreignKey: 'user_id' });
 Form_Answer.belongsTo(User, { foreignKey: 'user_id' });
+
+User.hasOne(Token, { foreignKey: 'user_id' });
+Token.belongsTo(User, { foreignKey: 'user_id' });
 
 Form_Answer.hasMany(Answer, { foreignKey: 'form_answer_id' });
 Answer.belongsTo(Form_Answer, { foreignKey: 'form_answer_id' });
@@ -62,5 +67,6 @@ export const Form_DB = Form;
 export const Answer_DB = Answer;
 export const Question_DB = Question;
 export const Form_Answer_DB = Form_Answer;
+export const Token_DB = Token;
 
 export default {};
