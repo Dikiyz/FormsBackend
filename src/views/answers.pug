@@ -1,0 +1,11 @@
+html 
+    head 
+        title= title
+        link(rel="stylesheet", href="/css/css-answers.css")
+        script(src='/js/js-answers.js')
+    body 
+        div(class="block" id="main")
+            div(class="block" id="subMain")
+                each answer in answers 
+                    div(class="container" id="answer" onClick=`goToAnswer(${answer.id})`)
+                        p= `${answer.user_name} (#${answer.user_id}): ${answer.name}`

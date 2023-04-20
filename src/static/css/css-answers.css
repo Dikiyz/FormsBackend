@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 21px;
+    font-family: 'Arial Narrow';
+    border: none;
+    outline: none;
+}
+
+body {
+    background-color: #8EF6E4;
+}
+
+.block#main {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+
+.block#subMain {
+    margin-top: 50px;
+    width: 1000px;
+    background-color: #9896F1;
+    padding: 50px 0;
+    border-radius: 7px;
+    padding: 50px 30px;
+}
+
+.container#answer {
+    border-radius: 6px;
+    padding: 10px 20px;
+    background-color: #D59BF6;
+    transition: background-color 0.3s;
+    margin-bottom: 15px
+}
+
+.container#answer:hover {
+    transition: 0.3s;
+    background-color: #ff89f5;
+}

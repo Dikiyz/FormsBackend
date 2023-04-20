@@ -1,0 +1,17 @@
+html 
+    head 
+        title= title
+        link(rel="stylesheet", href="/css/css-answer.css")
+        script(src='/js/js-answer.js')
+    body 
+        div(class="block" id="main")
+            div(class="block" id="subMain")
+                div(id="header")
+                    h1=`Форма: ${answers[0].form_name}`
+                    p=`ID Формы: ${answers[0].form_id}`
+                    p=`Ответчик: ${answers[0].user_name} #${answers[0].user_id}`
+                div(id="content")
+                    each answer in answers 
+                        div(class="container" id="answer" onClick=`goToAnswer(${answer.id})`)
+                            h2= `${answer.question}`
+                            p= `${answer.answer}`

@@ -5,9 +5,9 @@ env.config();
 
 export default function (request, response, next) {
     try {
-        const token = request.cookies.access_token;
+        const token = request.cookies.refresh_token;
         if (!token) return next(ApiError.badRequest("Вы не авторизованы."));
-        const userData = TokenService.validateAccessToken(token);
+        const userData = TokenService.validateRefreshToken(token);
         if (!userData) return next(ApiError.badRequest("Вы не авторизованы."));
 
         request.user = userData;

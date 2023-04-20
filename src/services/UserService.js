@@ -56,7 +56,7 @@ export default class UserService {
         const data = TokenService.validateRefreshToken(refresh_token);
         const DB_Token = await TokenService.findToken(refresh_token);
         if (!data || !DB_Token) throw ApiError.badRequest("Вы не авторизрованы.");
-        
+
         const user = await User_DB.findByPk(data.id);
         const user_dto = new UserDto(user);
         const tokens = await TokenService.createTokens({ ...user_dto });

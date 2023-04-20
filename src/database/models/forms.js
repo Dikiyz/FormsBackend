@@ -21,6 +21,11 @@ export default {
             type: Sequelize.STRING(512),
             allowNull: false
         },
+        have_picture: {
+            type: Sequelize.BOOLEAN,
+            default: false,
+            allowNull: false
+        },
         create_date: {
             type: Sequelize.DATE,
             allowNull: false,

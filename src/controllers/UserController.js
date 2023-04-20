@@ -1,7 +1,5 @@
 import ApiError from "../ApiError.js";
 import env from "dotenv";
-import { User_DB } from "../database/index.js";
-import { Op } from "sequelize";
 import UserService from "../services/UserService.js";
 
 env.config();

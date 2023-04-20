@@ -5,7 +5,7 @@ export default class UserDto {
     email;
     isAdmin;
 
-    constructor ({ id, name, login, email, isAdmin }) {
+    constructor({ id, name, login, email, isAdmin }) {
         this.id = id;
         this.name = name;
         this.login = login;

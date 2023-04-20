@@ -1,47 +1,29 @@
 import ApiError from "../ApiError.js";
-import { Form_DB, Question_DB } from "../database/index.js";
 import env from "dotenv";
 import FormService from "../services/FormService.js";
 
 env.config();
 
 class FormController {
+    async addPage(request, response, next) {
+        try {
+            response.render('addPage', { title: "Создание формы" });
+        } catch (err) { next(ApiError.internal(err.message)); }
+    }
+
     async add(request, response, next) {
         try {
-            const { name, questions } = request.body;
-
-            if (!name || !questions) return next(ApiError.badRequest("Вы не заполнили название формы, либо её вопросы."));
-            if (questions.length > 10) return next(ApiError.badRequest("В одну форму нельзя добавить более 10-ти вопросов."));
-
-            Form_DB.create({ name: name, description: description, author_id: request.user.id }).then(result => {
-                try {
-                    questions.foreach(question => {
-                        Question_DB.create({
-                            name: question.name,
-                            form_id: result.id,
-                            type: question.type,
-                            data: JSON.stringify(question.data)
-                        });
-                    });
-                } catch (err) {
-                    Form_DB.destroy({ where: { id: result.id } });
-                    next(ApiError.internal(err));
-                }
-            });
+            const { name, description, questions } = request.body;
+            const Form = await FormService.addNew(request.user.id, name, description, questions);
+            response.status(200).json({ message: `Форма успешно создана! Её id: ${Form.id}` });
         } catch (err) { next(ApiError.internal(err.message)); }
     }
 
     async remove(request, response, next) {
         try {
-            const { id } = request.body;
+            const { id } = request.params;
             FormService.removeById(id);
-        } catch (err) { next(ApiError.internal(err.message)); }
-    }
-
-    async done(request, response, next) {
-        try {
-            const { form_id, answers } = request.body;
-            // TODO: All.
+            response.status(200).json({ message: "Форма успешно удалена!" });
         } catch (err) { next(ApiError.internal(err.message)); }
     }
 
@@ -53,7 +35,7 @@ class FormController {
                 form_name: Form.name,
                 form_desc: Form.description,
                 form_id: Form.id,
-                message: "Проверка работоспособности",
+                isAdmin: request.user.isAdmin,
                 questions: Form.questions.map(question => {
                     try {
                         return {
@@ -70,9 +52,21 @@ class FormController {
     async getList(request, response, next) {
         try {
             const Forms = await FormService.getAll();
+            const formsArray = [];
+            let formsLine = [];
+            Forms.forEach((form, idx) => {
+                if (form.have_picture) form.imgPath = `/img/forms/${form.id}.png`;
+                else form.imgPath = `/img/forms/default.png`;
+                formsLine.push(form);
+                if (idx % 4 === 0 && idx !== 0) {
+                    formsArray.push(formsLine);
+                    formsLine = [];
+                }
+            });
+            if (formsLine.length !== 0) formsArray.push(formsLine);
             response.render('forms', {
-                title: "Формы",
-                forms: result
+                title: "Список форм",
+                formsArray, isAdmin: request.user.isAdmin
             });
         } catch (err) { next(ApiError.internal(err.message)); }
     }

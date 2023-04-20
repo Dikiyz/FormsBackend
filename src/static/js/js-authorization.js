@@ -25,7 +25,7 @@ function tryLogIn() {
         headers: { "Content-type": "application/json; charset=UTF-8" }
     }).then(async result => {
         result = await result.json();
-        if (result.logined) window.location = "/form/1";
+        if (result.logined) window.location = "/form";
         else alert(result.message);
     });
 }

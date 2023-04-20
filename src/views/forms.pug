@@ -6,18 +6,10 @@ html
     body 
         div(class="block" id="main")
             div(class="block" id="subMain")
-                div(class="block" id="content")
-                    each question in questions 
-                        div(class="container" id="question")
-                            p(class="text" id="question")= question.name
-                            case question.type 
-                                when 0
-                                    input(type="text" id="answerInput")
-                                when 1
-                                    each variant in question.data.variants
-                                        div(style="display: flex")
-                                            input(id="radio" type="radio" name=question value=variant)
-                                            p(class="text" id="variant")= variant
-                                default 
-                                    p Нет такого типа вопроса!
-                    button(class="button" id="sendAnswers" onClick="sendAnswers()") Отправить
+                each forms in formsArray
+                    div(class="block" id="content")
+                        each form in forms 
+                            div(class="container" id="form")
+                                img(src=`${form.imgPath}`, alt="")
+                                p(class="text" id="question")= form.name
+                                button(onClick=`openForm(${form.id})`) Перейти

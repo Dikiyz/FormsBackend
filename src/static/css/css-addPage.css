@@ -19,6 +19,21 @@ body {
     background-color: #8EF6E4;
 }
 
+input {
+    display: block;
+    padding: 8px;
+    width: 360px;
+    border-radius: 5px;
+    font-size: 20px;
+    background-color: white;
+    padding: 3px 9px;
+}
+
+#headerInputs {
+    padding: 8px 9px;
+    margin-bottom: 20px;
+}
+
 .block#main {
     width: 100vw;
     display: flex;
@@ -33,28 +48,23 @@ body {
     border-radius: 7px;
 }
 
-.text#question {
-    font-weight: 600;
-    margin-bottom: 8px;
-}
-
 .block#content,
-.block#header {
+.block#header,
+.block#panel {
     padding: 0 80px;
     text-align: left;
 }
 
-.questionContainer {
-    padding: 12px 0;
+.block#panel {
+    margin-top: 50px;
+    margin-bottom: -20px;
+    display: flex;
+    justify-content: space-between;
 }
 
-input {
-    margin-top: -4px;
-    width: 300px;
-    border-radius: 5px;
-    font-size: 22px;
-    background-color: white;
-    padding: 8px;
+.questionContainer {
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 button {
@@ -62,10 +72,9 @@ button {
     border-radius: 6px;
     width: 200px;
     height: 40px;
+    transition: background-color 0.3s;
     font-size: 20px;
     font-weight: 700;
-    transition: background-color 0.3s;
-    margin-top: 10px;
 }
 
 button:hover {
@@ -73,8 +82,69 @@ button:hover {
     background-color: #ff89f5;
 }
 
+.variantInput {
+    font-size: 17px;
+}
+
+#addVariant {
+    height: 30px;
+    width: 30px;
+    background: url('http://localhost/img/add.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#addVariant:hover {
+    background-color: rgb(69, 198, 81);
+}
+
+#removeQuestion,
+.removeVariant {
+    height: 30px;
+    width: 30px;
+    background: url('http://localhost/img/trash.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#removeQuestion:hover,
+.removeVariant:hover {
+    background-color: rgb(249, 86, 86);
+}
+
+#variant {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#questionTypeText {
+    font-size: 19px;
+    font-weight: 600;
+    margin-top: 13px;
+    margin-bottom: 7px;
+}
+
 #variantList {
-    margin-bottom: 6px;
+    margin-bottom: 7px;
 }
 
 input[type="radio"]:checked,

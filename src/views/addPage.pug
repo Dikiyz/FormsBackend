@@ -1,0 +1,15 @@
+html 
+    head 
+        title= title 
+        link(rel="stylesheet", href="/css/css-addPage.css")
+        script(src='/js/js-addPage.js')
+    body 
+        div(class="block" id="main")
+            div(class="block" id="subMain")
+                div(class="block" id="header")
+                    input(type="text" id="headerInputs" name="form_name" placeholder="Название формы" onchange="changeName(this.value)")
+                    input(type="text" id="headerInputs"  name="forn_description" placeholder="Описание формы" onchange="changeDesc(this.value)")
+                div(class="block" id="content" style="min-height: 50px")
+                div(class="block" id="panel")
+                    button(class="button" id="addQuestion" onClick="addQuestion()") Добавить вопрос
+                    button(class="button" id="createForm" onClick="createForm()") Создать форму
