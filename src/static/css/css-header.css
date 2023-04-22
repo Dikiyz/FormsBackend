@@ -1,0 +1,39 @@
+header {
+    height: 60px;
+    background-color: #9896F1;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 20px;
+}
+
+.logo {
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: space-between;
+    line-height: 50px;
+    width: 165px;
+    padding: 5px 0px;
+}
+
+.logo:hover {
+    cursor: pointer;
+}
+
+.butContainer {
+    display: flex;
+    background-color: red;
+}
+
+button {
+    transition: background-color 0.3s;
+    background-color: #9896F1;
+    padding: 0px 15px;
+    font-size: 21px;
+}
+
+button:hover {
+    transition: 0.3s;
+    background-color: #D59BF6;
+}
+

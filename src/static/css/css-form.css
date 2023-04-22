@@ -1,36 +1,19 @@
-* {
-    margin: 0;
-    padding: 0;
-    font-size: 19px;
-    font-family: 'Arial Narrow';
-    border: none;
-    outline: none;
-}
-
-h1 {
-    font-size: 30px;
-}
-
 p {
     text-align: justify;
 }
 
-body {
-    background-color: #8EF6E4;
-}
-
 .block#main {
-    width: 100vw;
     display: flex;
     justify-content: center;
 }
 
 .block#subMain {
-    margin-top: 50px;
+    margin-top: 40px;
     width: 800px;
     background-color: #9896F1;
     padding: 50px 0;
     border-radius: 7px;
+    margin-bottom: 40px;
 }
 
 .text#question {
@@ -57,7 +40,7 @@ input {
     padding: 8px;
 }
 
-button {
+.button {
     background-color: #D59BF6;
     border-radius: 6px;
     width: 200px;
@@ -68,7 +51,7 @@ button {
     margin-top: 10px;
 }
 
-button:hover {
+.button:hover {
     transition: 0.3s;
     background-color: #ff89f5;
 }

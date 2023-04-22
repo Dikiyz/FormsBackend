@@ -7,7 +7,7 @@ env.config();
 class FormController {
     async addPage(request, response, next) {
         try {
-            response.render('addPage', { title: "Создание формы" });
+            response.render('addPage', { title: "Создание формы", isAdmin: request.user.isAdmin });
         } catch (err) { next(ApiError.internal(err.message)); }
     }
 

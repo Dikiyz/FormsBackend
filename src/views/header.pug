@@ -1,0 +1,16 @@
+html 
+    head 
+        link(rel="stylesheet", href="/css/css-zero.css")
+        link(rel="stylesheet", href="/css/css-header.css")
+        script(src='/js/js-header.js')
+    body 
+        header 
+            div(class="logo" onClick="redirect(\"/form\")")
+                img(src="/favicon.ico", alt="" style="height: 50px; width: auto;")
+                h2 RusForms
+            div(class="butContainer")
+                if isAdmin
+                    button(class="newForm" onClick="redirect(\"/form/add\")") Новая форма
+                    button(class="answers" onClick="redirect(\"/answer\")") Ответы
+                button(class="forms" onClick="redirect(\"/form\")") Формы
+                button(class="myAnswers" onClick="redirect(\"/answer/my\")") Мои ответы

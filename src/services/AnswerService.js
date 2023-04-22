@@ -3,10 +3,20 @@ import { Answer_DB, Form_Answer_DB, Form_DB, User_DB } from "../database/index.j
 import FormService from "./FormService.js";
 import AnswersDto from "../dtos/AnswersDto.js";
 import AnswerDto from "../dtos/AnswerDto.js";
+import Op from 'sequelize';
 
 class AnswerService {
-    async getAnswers() {
-        const answers = await Form_Answer_DB.findAll({
+    async getAnswers(onlyUserAnswers = false) {
+        const answers = onlyUserAnswers ? await Form_Answer_DB.findAll({
+            order: [['id', 'DESC']], limit: 100, include: [{
+                model: User_DB,
+                where: { id: parseInt(onlyUserAnswers) },
+                required: true
+            }, {
+                model: Form_DB,
+                required: true
+            }]
+        }) : await Form_Answer_DB.findAll({
             order: [['id', 'DESC']], limit: 100, include: [{
                 model: User_DB,
                 required: true
@@ -15,6 +25,8 @@ class AnswerService {
                 required: true
             }]
         });
+
+        console.log(JSON.stringify(answers))
 
         const AnswersDtos = [];
         answers.forEach(answer => {

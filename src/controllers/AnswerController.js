@@ -2,10 +2,18 @@ import ApiError from '../ApiError.js';
 import AnswerService from '../services/AnswerService.js';
 
 class AnswerController {
+    async getMy(request, response, next) {
+        try {
+            console.log(1)
+            const answers = await AnswerService.getAnswers(request.user.id);
+            response.render('answers', { answers, title: "Ответы", isAdmin: request.user.isAdmin });
+        } catch (err) { next(ApiError.internal(err.message)); }
+    }
+
     async getAll(request, response, next) {
         try {
             const answers = await AnswerService.getAnswers();
-            response.render('answers', { answers, title: "Ответы" });
+            response.render('answers', { answers, title: "Ответы", isAdmin: request.user.isAdmin });
         } catch (err) { next(ApiError.internal(err.message)); }
     }
 
@@ -14,7 +22,7 @@ class AnswerController {
             const answers = await AnswerService.getAnswer(request.params.id);
             response.render('answer', {
                 title: `Ответ #${request.params.id}`,
-                answers
+                answers, isAdmin: request.user.isAdmin
             });
         } catch (err) { next(ApiError.internal(err.message)); }
     }

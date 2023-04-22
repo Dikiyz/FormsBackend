@@ -7,6 +7,7 @@ const router = new Router();
 router.set('view engine', 'pug');
 router.set('views', 'src/views');
 
+router.get('/my', AnswerController.getMy);
 router.get('/:id', CheckIsAdminMiddleware, AnswerController.getOne);
 router.get('/', CheckIsAdminMiddleware, AnswerController.getAll);
 router.post('/', AnswerController.addNew);

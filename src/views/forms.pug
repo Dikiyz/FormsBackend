@@ -1,6 +1,8 @@
 html 
+    include header.pug
     head 
         title= title
+        link(rel="stylesheet", href="/css/css-zero.css")
         link(rel="stylesheet", href="/css/css-forms.css")
         script(src='/js/js-forms.js')
     body 
@@ -12,4 +14,4 @@ html
                             div(class="container" id="form")
                                 img(src=`${form.imgPath}`, alt="")
                                 p(class="text" id="question")= form.name
-                                button(onClick=`openForm(${form.id})`) Перейти
+                                button(class="button" onClick=`openForm(${form.id})`) Перейти
